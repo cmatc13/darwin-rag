@@ -1,0 +1,10 @@
+version: '3.8'
+services:
+  langchain-chainlit-chat-app:
+    image: langchain-chainlit-chat-app:latest
+    build: .
+    ports:
+      - "8000:8000"
+    working_dir: /app/
+    command: ["chainlit", "run", "/app/demo_app/main.py"]
+  
