@@ -1,25 +1,17 @@
 <h1 align="center">
-📖 LangChain-Chainlit-Docker-Deployment App Template
+📖 LangChain-Chainlit-Docker-Deployment App
 </h1>
-
-![UI](ui.PNG?raw=true)
 
 
 ## 🔧 Features
 
-- Basic Skeleton App configured with `openai` API
+- Configured with `openai` API
 - A ChatBot using LangChain and Chainlit
-- Docker Support with Optimisation Cache etc
+- Docker Support
 - Deployment on Google Cloud App Engine
 - Deployment on Google Cloud using `Cloud Run`
 
-> Reference repository: https://github.com/cmatc13/langchain-chainlit-docker-deployment-template
-
-This repo contains an `main.py` file which has a template for a chatbot implementation.
-
-## Adding your chain
-To add your chain, you need to change the `load_chain` function in `main.py`.
-Depending on the type of your chain, you may also need to change the inputs/outputs that occur later on.
+> Heavily influenced by repository:  https://github.com/amjadraza/langchain-chainlit-docker-deployment-template
 
 
 ## 💻 Running Locally
@@ -27,7 +19,7 @@ Depending on the type of your chain, you may also need to change the inputs/outp
 1. Clone the repository📂
 
 ```bash
-git clone https://github.com/cmatc13/langchain-chainlit-docker-deployment-template
+git clone https://github.com/cmatc13/lano-llm-app
 ```
 
 2. Install dependencies with [Poetry](https://python-poetry.org/) and activate virtual environment🔨
