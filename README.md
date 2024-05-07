@@ -127,9 +127,12 @@ Follow below guide on basic Instructions.
 
 https://cloud.google.com/sdk/docs/install#linux
 
-curl -O https://dl.google.com/dl/cloudsdk/channels/rapid/downloads/google-cloud-cli-474.0.0-linux-x86_64.tar.gz
+#curl -O https://dl.google.com/dl/cloudsdk/channels/rapid/downloads/google-cloud-cli-474.0.0-linux-x86_64.tar.gz
+#tar -xf google-cloud-cli-474.0.0-linux-x86_64.tar.gz
 
-tar -xf google-cloud-cli-474.0.0-linux-x86_64.tar.gz
+curl -LO https://github.com/tonymet/gcloud-lite/releases/download/472.0.0/google-cloud-cli-472.0.0-linux-x86_64-lite.tar.gz
+tar -zxf *gz
+
 
 ./google-cloud-sdk/install.sh
 
