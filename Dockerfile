@@ -27,12 +27,16 @@ WORKDIR /app
 
 # Install Python dependencies via Poetry
 COPY pyproject.toml poetry.lock rare-daylight-418614-e1907d935d97.json chainlit.md ./
-COPY /public /public
+#COPY /public /public
 RUN poetry install --no-root --no-dev --no-interaction --no-ansi --no-plugins
 
 # Optionally, install requirements.txt if not all packages are managed by Poetry
 COPY requirements.txt ./
 RUN pip install --no-cache-dir -r requirements.txt
+COPY rare-daylight-418614-e1907d935d97.json ./
+COPY google-cloud-sdk ./
+COPY google-cloud-cli-472.0.0-linux-x86_64-lite.tar.gz ./
+
 
 # Copy the application code to the container
 COPY ./demo_app ./demo_app
@@ -44,7 +48,7 @@ FROM python:3.11-slim-buster as runtime
 COPY --from=builder /opt /opt
 COPY --from=builder /root/.local /root/.local
 COPY --from=builder /app /app
-COPY --from=builder /public /public
+#COPY --from=builder /public /public
 COPY .env /app
 
 

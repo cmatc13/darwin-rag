@@ -72,6 +72,8 @@ docker  build . -t langchain-chainlit-chat-app:latest > docker_build.log 2>&1
 and without cache
 docker  build . -t langchain-chainlit-chat-app:latest --no-cache > docker_build.log 2>&1
 
+docker  build . -t lano-llm-app:latest --no-cache > docker_build.log 2>&1
+
 
 
 To generate Image with `DOCKER_BUILDKIT`, follow below command
@@ -80,7 +82,8 @@ To generate Image with `DOCKER_BUILDKIT`, follow below command
 
 1. Run the docker container directly 
 
-``docker run -d --name langchain-chainlit-chat-app -p 8000:8000 langchain-chainlit-chat-app ``
+``docker run -d --name lano-llm-app -p 8000:8000 lano-llm-app ``
+
 
 2. Run the docker container using docker-compose (Recommended)
 
@@ -143,10 +146,12 @@ First create a project in GCP console
 
 gcloud auth login
 gcloud auth list
+# for new project
 gcloud app create --project=[YOUR_PROJECT_ID]
 gcloud config set project [YOUR_PROJECT_ID]
 Provide billing account for this project by running gcloud beta billing accounts list OR you can do it manually from the GCP console.
 
+# for new project
 Enable Services for the Project: We have to enable services for Cloud Run using below set of commands
 gcloud services enable cloudbuild.googleapis.com
 gcloud services enable run.googleapis.com
@@ -172,28 +177,32 @@ gcloud projects add-iam-policy-binding [YOUR_PROJECT_ID] \
 # Check the artifacts location
 gcloud artifacts locations list
 # Generate Docker with Region
-DOCKER_BUILDKIT=1 docker build --target=runtime . -t europe-west6-docker.pkg.dev/[YOUR_PROJECT_ID]/clapp/[YOUR_DOCKER_IMAGE]:latest
+DOCKER_BUILDKIT=1 docker build --target=runtime . -t europe-west10-docker.pkg.dev/[YOUR_PROJECT_ID]/clapp/[YOUR_DOCKER_IMAGE]:latest
+
+DOCKER_BUILDKIT=1 docker build --target=runtime . -t europe-west10-docker.pkg.dev/rare-daylight-418614/clapp/lano-llm-app:latest
+
 # Push Docker to Artifacts Registry
 # Create a repository clapp
 gcloud artifacts repositories create clapp \
     --repository-format=docker \
-    --location=europe-west6 \
-    --description="A Langachain Chainlit App" \
+    --location=europe-west10 \
+    --description="A Langachain Chainlit LLM App" \
     --async
 # Assign authuntication
-gcloud auth configure-docker europe-west6-docker.pkg.dev
+gcloud auth configure-docker europe-west10-docker.pkg.dev
 
 # Push the Container to Repository
 docker images
 docker push europe-west6-docker.pkg.dev/[YOUR_PROJECT_ID]/clapp/langchain-chainlit-chat-app:latest
+docker push europe-west10-docker.pkg.dev/rare-daylight-418614/clapp/lano-llm-app:latest
 # Deploy the App using Cloud Run
 gcloud run deploy langchain-cl-chat-with-csv-app --image=europe-west6-docker.pkg.dev/langchain-cl-chat-with-csv/clapp/langchain-chainlit-chat-app:latest \
     --region=europe-west6 \
     --service-account=langchain-app-cr@langchain-cl-chat-with-csv.iam.gserviceaccount.com \
     --port=8000
 
-gcloud run deploy lano-llm-app --image=europe-west6-docker.pkg.dev/rare-daylight-418614/clapp/langchain-chainlit-chat-app:latest \
-    --region=europe-west6 \
+gcloud run deploy lano-llm-app --image=europe-west10-docker.pkg.dev/rare-daylight-418614/clapp/lano-llm-app:latest \
+    --region=europe-west10 \
     --service-account=lano-ilo-app-service-account@rare-daylight-418614.iam.gserviceaccount.com \
     --port=8000 \
     --memory=2G
