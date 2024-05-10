@@ -10,6 +10,9 @@ RUN apt-get update && \
     apt-get install -y wget unzip jq curl libglib2.0-0 libnss3 libnspr4 libxss1 libx11-xcb1 xdg-utils
 
 
+RUN curl -LO https://github.com/tonymet/gcloud-lite/releases/download/472.0.0/google-cloud-cli-472.0.0-linux-x86_64-lite.tar.gz
+RUN tar -zxf *gz
+
 # Install Poetry
 RUN curl -sSL https://install.python-poetry.org | python3 -
 # Add Poetry to the PATH explicitly
@@ -30,22 +33,6 @@ RUN poetry install --no-root --no-dev --no-interaction --no-ansi --no-plugins
 # Optionally, install requirements.txt if not all packages are managed by Poetry
 COPY requirements.txt ./
 RUN pip install --no-cache-dir -r requirements.txt
-
-# Install Google Chrome
-RUN wget -qO /tmp/versions.json https://googlechromelabs.github.io/chrome-for-testing/last-known-good-versions-with-downloads.json && \
-    CHROME_URL=$(jq -r '.channels.Stable.downloads.chrome[] | select(.platform=="linux64") | .url' /tmp/versions.json) && \
-    wget -q --continue -O /tmp/chrome-linux64.zip $CHROME_URL && \
-    unzip /tmp/chrome-linux64.zip -d /opt/chrome && \
-    chmod +x /opt/chrome/chrome-linux64/chrome
-
-# Install Chromedriver
-RUN CHROMEDRIVER_URL=$(jq -r '.channels.Stable.downloads.chromedriver[] | select(.platform=="linux64") | .url' /tmp/versions.json) && \
-    wget -q --continue -O /tmp/chromedriver-linux64.zip $CHROMEDRIVER_URL && \
-    unzip /tmp/chromedriver-linux64.zip -d /opt/chromedriver && \
-    chmod +x /opt/chromedriver/chromedriver-linux64/chromedriver
-
-# Clean up to reduce image size
-RUN rm /tmp/chrome-linux64.zip /tmp/chromedriver-linux64.zip /tmp/versions.json
 
 # Copy the application code to the container
 COPY ./demo_app ./demo_app
@@ -91,7 +78,7 @@ RUN apt-get update && apt-get install -y \
 
 # Set up environment variables for the virtual environment
 ENV VIRTUAL_ENV="/app/.venv"
-ENV PATH="$VIRTUAL_ENV/bin:/opt/chromedriver/chromedriver-linux64:/opt/chrome/chrome-linux64:/root/.local/bin:$PATH"
+ENV PATH="$VIRTUAL_ENV/bin:/root/.local/bin:$PATH"
 
 # Set the working directory
 WORKDIR /app
