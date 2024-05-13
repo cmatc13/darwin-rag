@@ -4,7 +4,7 @@ enable_telemetry = true
 
 
 # List of environment variables to be provided by each user to use the app.
-user_env = ["OPENAI_API_KEY"]
+#user_env = ["OPENAI_API_KEY"]
 
 # Duration (in seconds) during which the session is saved when the connection is lost
 session_timeout = 3600
@@ -30,7 +30,7 @@ latex = false
 
 # Authorize users to upload files with messages
 [features.multi_modal]
-    enabled = true
+    enabled = false
     accept = ["*/*"]
     max_files = 20
     max_size_mb = 500
@@ -39,11 +39,11 @@ latex = false
 [features.speech_to_text]
     enabled = false
     # See all languages here https://github.com/JamesBrill/react-speech-recognition/blob/HEAD/docs/API.md#language-string
-    # language = "en-GB"
+    language = "en-GB"
 
 [UI]
 # Name of the app and chatbot.
-name = "Chatbot"
+name = "Lano LLM"
 
 # Show the readme while the thread is empty.
 show_readme_as_default = true
@@ -81,25 +81,25 @@ hide_cot = false
 
 # Override default MUI light theme. (Check theme.ts)
 [UI.theme]
-    #font_family = "Inter, sans-serif"
+    font_family = "Inter, sans-serif"
 [UI.theme.light]
-    #background = "#FAFAFA"
-    #paper = "#FFFFFF"
+    background = "#FAFAFA"
+    paper = "#FFFFFF"
 
     [UI.theme.light.primary]
-        #main = "#1E32FA"
-        #dark = "#1E32FA"
-        #light = "#D0E2FF"
+        main = "#1E32FA"
+        dark = "#1E32FA"
+        light = "#D0E2FF"
 
 # Override default MUI dark theme. (Check theme.ts)
 [UI.theme.dark]
-    #background = "#FAFAFA"
-    #paper = "#FFFFFF"
+    background = "#FAFAFA"
+    paper = "#FFFFFF"
 
     [UI.theme.dark.primary]
-        #main = "#1E32FA"
-        #dark = "#1E32FA"
-        #light = "#D0E2FF"
+        main = "#1E32FA"
+        dark = "#1E32FA"
+        light = "#D0E2FF"
 
 
 [meta]
