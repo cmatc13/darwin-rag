@@ -68,7 +68,7 @@ theme_files = {
 
 def download_blob(bucket_name, source_blob_name, destination_file_name):
     """Downloads a blob from the bucket."""
-    storage_client = storage.Client.from_service_account_json('rare-daylight-418614-e1907d935d97.json')
+    storage_client = storage.Client.from_service_account_json('llm-app-project-26a82e769088.json')
     bucket = storage_client.bucket(bucket_name)
     blob = bucket.blob(source_blob_name)
 

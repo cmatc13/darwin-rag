@@ -156,15 +156,21 @@ Enable Services for the Project: We have to enable services for Cloud Run using 
 gcloud services enable cloudbuild.googleapis.com
 gcloud services enable run.googleapis.com
 #Create Service Accounts with Permissions
-gcloud iam service-accounts create langchain-app-cr \
-    --display-name="langchain-app-cr"
+gcloud iam service-accounts create lano-llm-app \
+    --display-name="lano-llm-app"
 
 gcloud projects add-iam-policy-binding [YOUR_PROJECT_ID] \
     --member="serviceAccount:lano-ilo-app-service-account@rare-daylight-418614.iam.gserviceaccount.com" \
     --role="roles/run.invoker"    
 
-gcloud projects add-iam-policy-binding [YOUR_PROJECT_ID] \
-    --member="serviceAccount:lano-ilo-app-service-account@rare-daylight-418614.iam.gserviceaccount.com" \
+gcloud projects add-iam-policy-binding llm-app-project \
+    --member="serviceAccount:lano-llm-app@llm-app-project.iam.gserviceaccount.com" \
+    --role="roles/run.invoker"
+	
+
+
+gcloud projects add-iam-policy-binding llm-app-project \
+    --member="serviceAccount:lano-llm-app@llm-app-project.iam.gserviceaccount.com" \
     --role="roles/serviceusage.serviceUsageConsumer"
 
 
@@ -172,6 +178,9 @@ gcloud projects add-iam-policy-binding [YOUR_PROJECT_ID] \
     --member="serviceAccount:lano-ilo-app-service-account@rare-daylight-418614.iam.gserviceaccount.com" \
     --role="roles/run.admin"
 
+gcloud projects add-iam-policy-binding llm-app-project \
+    --member="serviceAccount:lano-llm-app@llm-app-project.iam.gserviceaccount.com" \
+    --role="roles/run.admin"
 
     
 # Check the artifacts location
@@ -179,7 +188,7 @@ gcloud artifacts locations list
 # Generate Docker with Region
 DOCKER_BUILDKIT=1 docker build --target=runtime . -t europe-west10-docker.pkg.dev/[YOUR_PROJECT_ID]/clapp/[YOUR_DOCKER_IMAGE]:latest
 
-DOCKER_BUILDKIT=1 docker build --target=runtime . -t europe-west10-docker.pkg.dev/rare-daylight-418614/clapp/lano-llm-app:latest
+DOCKER_BUILDKIT=1 docker build --target=runtime . -t europe-west10-docker.pkg.dev/llm-app-project/clapp/lano-llm-app:latest
 
 # Push Docker to Artifacts Registry
 # Create a repository clapp
