@@ -78,7 +78,7 @@ def download_blob(bucket_name, source_blob_name, destination_file_name):
 
 # Iterate through the dictionary items
 for theme, filename in theme_files.items():
-    download_blob("ilo_data_storage", filename, filename)
+    download_blob("ilo_storage", filename, filename)
 
 
 
