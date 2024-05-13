@@ -74,7 +74,7 @@ docker  build . -t langchain-chainlit-chat-app:latest --no-cache > docker_build.
 
 docker  build . -t lano-llm-app:latest --no-cache > docker_build.log 2>&1
 
-
+docker run --rm lano-llm-app
 
 To generate Image with `DOCKER_BUILDKIT`, follow below command
 
@@ -149,6 +149,7 @@ gcloud auth list
 # for new project
 gcloud app create --project=[YOUR_PROJECT_ID]
 gcloud config set project [YOUR_PROJECT_ID]
+gcloud config set project llm-app-project
 Provide billing account for this project by running gcloud beta billing accounts list OR you can do it manually from the GCP console.
 
 # for new project
@@ -167,6 +168,7 @@ gcloud projects add-iam-policy-binding llm-app-project \
     --member="serviceAccount:lano-llm-app@llm-app-project.iam.gserviceaccount.com" \
     --role="roles/run.invoker"
 	
+
 
 
 gcloud projects add-iam-policy-binding llm-app-project \
@@ -190,6 +192,7 @@ DOCKER_BUILDKIT=1 docker build --target=runtime . -t europe-west10-docker.pkg.de
 
 DOCKER_BUILDKIT=1 docker build --target=runtime . -t europe-west10-docker.pkg.dev/llm-app-project/clapp/lano-llm-app:latest
 
+
 # Push Docker to Artifacts Registry
 # Create a repository clapp
 gcloud artifacts repositories create clapp \
@@ -203,16 +206,17 @@ gcloud auth configure-docker europe-west10-docker.pkg.dev
 # Push the Container to Repository
 docker images
 docker push europe-west6-docker.pkg.dev/[YOUR_PROJECT_ID]/clapp/langchain-chainlit-chat-app:latest
-docker push europe-west10-docker.pkg.dev/rare-daylight-418614/clapp/lano-llm-app:latest
+docker push europe-west10-docker.pkg.dev/llm-app-project/clapp/lano-llm-app:latest
+
 # Deploy the App using Cloud Run
 gcloud run deploy langchain-cl-chat-with-csv-app --image=europe-west6-docker.pkg.dev/langchain-cl-chat-with-csv/clapp/langchain-chainlit-chat-app:latest \
     --region=europe-west6 \
     --service-account=langchain-app-cr@langchain-cl-chat-with-csv.iam.gserviceaccount.com \
     --port=8000
 
-gcloud run deploy lano-llm-app --image=europe-west10-docker.pkg.dev/rare-daylight-418614/clapp/lano-llm-app:latest \
+gcloud run deploy lano-llm-app --image=europe-west10-docker.pkg.dev/llm-app-project/clapp/lano-llm-app:latest \
     --region=europe-west10 \
-    --service-account=lano-ilo-app-service-account@rare-daylight-418614.iam.gserviceaccount.com \
+    --service-account=lano-llm-app@llm-app-project.iam.gserviceaccount.com \
     --port=8000 \
     --memory=2G
 

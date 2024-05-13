@@ -1,7 +1,7 @@
 version: '3.8'
 services:
-  langchain-chainlit-chat-app:
-    image: langchain-chainlit-chat-app:latest
+  lano-llm-app:
+    image: lano-llm-app:latest
     build: .
     ports:
       - "8000:8000"

@@ -38,6 +38,8 @@ COPY llm-app-project-26a82e769088.json ./
 COPY google-cloud-sdk ./
 COPY google-cloud-cli-472.0.0-linux-x86_64-lite.tar.gz ./
 COPY download ./download/
+COPY .chainlit/config.toml .chainlit/
+COPY public ./public/
 
 # Copy the application code to the container
 COPY ./demo_app ./demo_app
@@ -53,32 +55,6 @@ COPY --from=builder /app /app
 COPY .env /app
 
 
-# Install system dependencies required for Chrome and Chromedriver
-RUN apt-get update && apt-get install -y \
-    wget \
-    libglib2.0-dev \
-    libnss3 \
-    libnss3-dev \  
-    libnspr4 \
-    libxcb1 \
-    libc6 \  
-    libdbus-1-3 \
-    libatk1.0-dev \
-    libatk-bridge2.0-dev \
-    libcups2 \
-    libdrm2 \
-    libatspi2.0-dev \
-    libx11-6 \
-    libxcomposite1 \
-    libxdamage1 \
-    libxext6 \
-    libxfixes3 \
-    libxrandr2 \
-    libgbm1 \
-    libxkbcommon0 \
-    libpango1.0-dev \
-    libcairo2 \
-    libasound2
 
 
 # Set up environment variables for the virtual environment
