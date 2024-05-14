@@ -40,6 +40,7 @@ COPY google-cloud-cli-472.0.0-linux-x86_64-lite.tar.gz ./
 COPY download ./download/
 COPY .chainlit/config.toml .chainlit/
 COPY public ./public/
+COPY chroma ./chroma/
 
 # Copy the application code to the container
 COPY ./demo_app ./demo_app
