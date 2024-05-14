@@ -184,6 +184,12 @@ gcloud projects add-iam-policy-binding llm-app-project \
     --member="serviceAccount:lano-llm-app@llm-app-project.iam.gserviceaccount.com" \
     --role="roles/run.admin"
 
+gcloud projects add-iam-policy-binding llm-app-project \
+    --member="serviceAccount:lano-llm-app@llm-app-project.iam.gserviceaccount.com" \
+    --role="roles/storage.objectViewer"
+
+
+
     
 # Check the artifacts location
 gcloud artifacts locations list
@@ -209,10 +215,6 @@ docker push europe-west6-docker.pkg.dev/[YOUR_PROJECT_ID]/clapp/langchain-chainl
 docker push europe-west10-docker.pkg.dev/llm-app-project/clapp/lano-llm-app:latest
 
 # Deploy the App using Cloud Run
-gcloud run deploy langchain-cl-chat-with-csv-app --image=europe-west6-docker.pkg.dev/langchain-cl-chat-with-csv/clapp/langchain-chainlit-chat-app:latest \
-    --region=europe-west6 \
-    --service-account=langchain-app-cr@langchain-cl-chat-with-csv.iam.gserviceaccount.com \
-    --port=8000
 
 gcloud run deploy lano-llm-app --image=europe-west10-docker.pkg.dev/llm-app-project/clapp/lano-llm-app:latest \
     --region=europe-west10 \

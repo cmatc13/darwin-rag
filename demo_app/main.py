@@ -82,131 +82,11 @@ for theme, filename in theme_files.items():
 
 
 
-# upload the embeddings to the bucket
-class MetaDataCSVLoader(BaseLoader):
-    """Loads a CSV file into a list of documents.
-
-    Each document represents one row of the CSV file. Every row is converted into a
-    key/value pair and outputted to a new line in the document's page_content.
-
-    The source for each document loaded from csv is set to the value of the
-    `file_path` argument for all doucments by default.
-    You can override this by setting the `source_column` argument to the
-    name of a column in the CSV file.
-    The source of each document will then be set to the value of the column
-    with the name specified in `source_column`.
-
-    Output Example:
-        .. code-block:: txt
-
-            column1: value1
-            column2: value2
-            column3: value3
-    """
-
-    def __init__(
-        self,
-        file_path: str,
-        source_column: Optional[str] = None,
-        metadata_columns: Optional[List[str]] = None,
-        content_columns: Optional[List[str]] =None ,
-        csv_args: Optional[Dict] = None,
-        encoding: Optional[str] = None,
-    ):
-        self.file_path = file_path
-        self.source_column = source_column
-        self.encoding = encoding
-        self.csv_args = csv_args or {}
-        self.content_columns= content_columns
-        self.metadata_columns = metadata_columns        # < ADDED
-
-    def load(self) -> List[Document]:
-        """Load data into document objects."""
-
-        docs = []
-        with open(self.file_path, newline="", encoding=self.encoding) as csvfile:
-            csv_reader = csv.DictReader(csvfile, **self.csv_args)  # type: ignore
-            for i, row in enumerate(csv_reader):
-                if self.content_columns:
-                    content = "\n".join(f"{k.strip()}: {v.strip()}" for k, v in row.items() if k in self.content_columns)
-                else:
-                    content = "\n".join(f"{k.strip()}: {v.strip()}" for k, v in row.items())
-                try:
-                    source = (
-                        row[self.source_column]
-                        if self.source_column is not None
-                        else self.file_path
-                    )
-                except KeyError:
-                    raise ValueError(
-                        f"Source column '{self.source_column}' not found in CSV file."
-                    )
-                metadata = {"source": source, "row": i}
-                # ADDED TO SAVE METADATA
-                if self.metadata_columns:
-                    for k, v in row.items():
-                        if k in self.metadata_columns:
-                            metadata[k] = v
-                # END OF ADDED CODE
-                doc = Document(page_content=content, metadata=metadata)
-                docs.append(doc)
-
-        return docs
 
 
- # Load data and set embeddings
-loader1 = MetaDataCSVLoader(file_path="download/Fixed_Term_Contracts_FTCs.csv",metadata_columns=['Region','Country', 'Year'])
-data1 = loader1.load()
-
-# Load data and set embeddings
-loader2 = MetaDataCSVLoader(file_path="download/Probationary_Trial_Period.csv",metadata_columns=['Region','Country', 'Year'])
-data2 = loader2.load()
-
-# Load data and set embeddings
-loader3 = MetaDataCSVLoader(file_path="download/Legal_Coverage_General.csv",metadata_columns=['Region','Country', 'Year'])
-data3 = loader3.load()
-
-# Load data and set embeddings
-loader4 = MetaDataCSVLoader(file_path="download/Legal_Coverage_Reference.csv",metadata_columns=['Region','Country', 'Year'])
-data4 = loader4.load()
-
-# Load data and set embeddings
-loader5 = MetaDataCSVLoader(file_path="download/Procedures_for_collective_dismissals.csv",metadata_columns=['Region','Country', 'Year'])
-data5 = loader5.load()
-
-# Load data and set embeddings
-loader5 = MetaDataCSVLoader(file_path="download/Procedures_for_individual_dismissals_general.csv",metadata_columns=['Region','Country', 'Year'])
-data5 = loader5.load()
-
-# Load data and set embeddings
-loader6 = MetaDataCSVLoader(file_path="download/Procedures_for_individual_dismissals_notice_period.csv",metadata_columns=['Region','Country', 'Year'])
-data6 = loader6.load()
-
-# Load data and set embeddings
-loader7 = MetaDataCSVLoader(file_path="download/Redress.csv",metadata_columns=['Region','Country', 'Year'])
-data7 = loader7.load()
-
-# Load data and set embeddings
-loader8 = MetaDataCSVLoader(file_path="download/Redundancy_and_severance_pay.csv",metadata_columns=['Region','Country', 'Year'])
-data8 = loader8.load()
-
-# Load data and set embeddings
-loader9 = MetaDataCSVLoader(file_path="download/Valid_and_prohibited_grounds_for_dismissal.csv",metadata_columns=['Region','Country', 'Year'])
-data9 = loader9.load()
-
-# Load data and set embeddings
-loader10 = MetaDataCSVLoader(file_path="download/Workers_enjoying_special_protection_against_dismissal.csv",metadata_columns=['Region','Country', 'Year'])
-data10 = loader10.load()
-
-
-data = data1 + data2 + data3 + data4 + data5 + data6 + data7 + data8 + data9 + data10
-
-
-"""
 def download_folder(bucket_name, prefix, destination_dir):
     
-    #storage_client = storage.Client()
-    storage_client = storage.Client.from_service_account_json('rare-daylight-418614-e1907d935d97.json')
+    storage_client = storage.Client.from_service_account_json('llm-app-project-26a82e769088.json')
     bucket = storage_client.get_bucket(bucket_name)
     
     blobs = bucket.list_blobs(prefix=prefix)  # List all objects that start with the folder prefix
@@ -217,28 +97,11 @@ def download_folder(bucket_name, prefix, destination_dir):
             print(f"Downloaded {blob.name} to {destination_file_name}")
 
 
-bucket_name = "ilo_data_storage"
-local_persistence_dir = 'chroma'  # Your local directory
-gcs_persistence_dir = 'chroma_persistence'  # Path in your GCS bucket
-
-download_folder(bucket_name, gcs_persistence_dir, local_persistence_dir)
-"""
 
 from langchain_openai import OpenAIEmbeddings
-embeddings = OpenAIEmbeddings(api_key=os.getenv("OPENAI_API_KEY"))
-
-local_persistence_dir = 'chroma'  # Your local directory
-vectorstore = Chroma.from_documents(documents=data, embedding=embeddings)
-print('Vectorstore Chroma.from_documents')
-print(type(vectorstore))
-
-
 from langchain.chains.llm import LLMChain
 from langchain.prompts import PromptTemplate, SystemMessagePromptTemplate, HumanMessagePromptTemplate,  ChatPromptTemplate
 
-
-
-llm= ChatOpenAI( model_name="gpt-4-turbo",temperature=0, api_key=os.getenv("OPENAI_API_KEY"))
 
 
 metadata_field_info=[
@@ -262,6 +125,18 @@ document_content_description = """Most recent legal information on the regulatio
 contracts and employment termination at the initiative of the employer. It covers over fifty elements 
 of employment protection, grouped under nine themes. The information is based on regulation at the 
 national level. """
+
+
+bucket_name = "ilo_storage"
+local_persistence_dir = 'chroma'  # Your local directory
+gcs_persistence_dir = 'chroma_persistence/'  # Path in your GCS bucket
+
+download_folder(bucket_name, gcs_persistence_dir, local_persistence_dir)
+embeddings = OpenAIEmbeddings(api_key=os.getenv("OPENAI_API_KEY"))
+vectorstore = Chroma(embedding_function=embeddings, persist_directory='chroma')
+
+llm= ChatOpenAI( model_name="gpt-4-turbo",temperature=0, api_key=os.getenv("OPENAI_API_KEY"))
+
 
 retriever = SelfQueryRetriever.from_llm(
 llm, vectorstore, document_content_description, metadata_field_info, search_kwargs={"k": 20},verbose=True
@@ -304,4 +179,4 @@ async def main(message: cl.Message):
 
 @cl.on_chat_start
 async def on_chat_start():
-    await cl.Message(content="Welcome to the Lano ILO LLM app!").send()
+    await cl.Message(content="""Welcome to the Lano ILO LLM app! I'm here to assist you with any questions you have about the EPLex database. This comprehensive resource provides detailed legal information on employment termination and the regulation of temporary contracts, focusing on key aspects of employment protection across various national contexts. Whether you're interested in specific regulations or comparative legal provisions, I'm here to help you navigate and understand the intricacies of International Labour Law.""").send()

@@ -16,3 +16,8 @@ EPlex also deals only with employees in the private sector. In the vast majority
 The countries included in the database showcase a diversity of legal systems, covering countries at all levels of development. The EPLex database is updated regularly, and information on additional countries continues to be added.
 
 The EPLex database has been developed by ILO lawyers and economists. The legal database is coordinated by Valérie Van Goethem and Colin Fenwick of the ILO Labour Law and Reform Unit (LABOURLAW). The quantification of the legal information is coordinated by Janine Berg of the ILO Inclusive Labour Markets, Labour Relations and Working Conditions Branch (INWORK).
+
+https://eplex.ilo.org/
+
+[EPLex database GSheet](https://docs.google.com/spreadsheets/d/1H7Uta6SOD6rvtWA4yWkkq_y1XX48ksFje8wK3SOZgPY/edit#gid=1700081429 "EPLex database")
+
