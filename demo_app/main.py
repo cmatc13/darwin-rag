@@ -160,9 +160,6 @@ provided in formulating your answer.
 @cl.on_message
 async def main(message: cl.Message):
 
-    #user_env = cl.user_session.get("env")
-    #os.environ["OPENAI_API_KEY"] = user_env.get("OPENAI_API_KEY")
-
     
     # Create the chat prompt templates
     messages = [

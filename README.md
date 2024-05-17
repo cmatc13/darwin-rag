@@ -15,21 +15,21 @@
 
 ## 💻 Running Locally
 
-1. Clone the repository📂
 
-```bash
-git clone https://github.com/cmatc13/lano-llm-app
-```
-
-2. Install dependencies with [Poetry](https://python-poetry.org/) and activate virtual environment🔨
+Install dependencies with [Poetry](https://python-poetry.org/) and activate virtual environment🔨
 
 ```bash
 poetry install
 poetry shell
 ```
+Any changes to [tool.poetry.dependencies] in the pyproject.toml file will need to run 
+```bash
+poetrty.install
+poetry lock
+poetry shell
+```
 
-3. Run the Chainlit server🚀
-
+Run the Chainlit server
 ```bash
 chainlit run demo_app/main.py
 ```
